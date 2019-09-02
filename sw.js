@@ -33,7 +33,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "js/app.js",
-    "revision": "8b9af24b763bccb35f4980ac6dabdc49"
+    "revision": "8472a8a7166be55599399c688c20d889"
   }
 ]);
 
