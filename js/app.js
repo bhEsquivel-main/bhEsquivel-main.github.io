@@ -55,35 +55,33 @@ window.onload = function () {
 };
 var loader = new PIXI.loaders.Loader();
 loader.add("image", "assets/_fortunechimes/button.png");
-loader.load(function () {
+loader.onComplete.add(function () {
     A2HS.initialize(function () {
         // add a2hs button
         addBtn = new button_1.Button(PIXI.utils.TextureCache["image"]);
         addBtn.setPos(new PIXI.Point(60, 30));
         app.stage.addChild(addBtn.sprite);
         addBtn.addClickHandler(function () {
-            onClickA2HS();
+            try {
+                A2HS.installPromptEvent.prompt();
+                // Wait for the user to respond to the prompt
+                A2HS.installPromptEvent.userChoice.then(function (choice) {
+                    if (choice.outcome === 'accepted') {
+                        console.log('User accepted the A2HS prompt');
+                    }
+                    else {
+                        console.log('User dismissed the A2HS prompt');
+                    }
+                    A2HS.installPromptEvent = null;
+                });
+            }
+            catch (e) {
+                console.log(e);
+            }
         });
     });
 });
-function onClickA2HS() {
-    try {
-        A2HS.installPromptEvent.prompt();
-        // Wait for the user to respond to the prompt
-        A2HS.installPromptEvent.userChoice.then(function (choice) {
-            if (choice.outcome === 'accepted') {
-                console.log('User accepted the A2HS prompt');
-            }
-            else {
-                console.log('User dismissed the A2HS prompt');
-            }
-            A2HS.installPromptEvent = null;
-        });
-    }
-    catch (e) {
-        console.log(e);
-    }
-}
+loader.load();
 
 },{"./addToHomeScreen":1,"./game/button":2,"pixi.js":143}],4:[function(require,module,exports){
 /**
