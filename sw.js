@@ -67,7 +67,7 @@ const assets = 'https://bhEsquivel-main.github.io/assets/'
 
 workbox.routing.registerRoute(
     new RegExp(assets),
-    workbox.strategies.staleWhileRevalidate({
+    workbox.strategies.networkFirst({
         cacheName: 'rslots-fchimes-assets',
         plugins: [
             expirationPlugin,
