@@ -33,7 +33,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "js/app.js",
-    "revision": "8472a8a7166be55599399c688c20d889"
+    "revision": "1e8fc413a86a8606d5f148d5abebd140"
   }
 ]);
 
@@ -63,7 +63,7 @@ this.workbox.core.setCacheNameDetails({
     suffix: `v:${version}`,
 });
 
-const assets = 'http://localhost:3000/games/fortunechimes/assets/'
+const assets = 'https://bhEsquivel-main.github.io/assets/'
 
 workbox.routing.registerRoute(
     new RegExp(assets),
