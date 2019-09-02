@@ -21,10 +21,9 @@ exports.AddToHomeScreen = AddToHomeScreen;
 },{}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var pixi_js_1 = require("pixi.js");
 var Button = /** @class */ (function () {
     function Button(texture) {
-        this.sprite = new pixi_js_1.Sprite(texture);
+        this.sprite = new PIXI.Sprite(texture);
         this.sprite.anchor.y = 0.5;
         this.sprite.anchor.x = 0.5;
     }
@@ -42,120 +41,49 @@ var Button = /** @class */ (function () {
 }());
 exports.Button = Button;
 
-},{"pixi.js":143}],3:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var pixi_js_1 = require("pixi.js");
+var PIXI = require("pixi.js");
 var addToHomeScreen_1 = require("./addToHomeScreen");
 var button_1 = require("./game/button");
-var Game = /** @class */ (function () {
-    function Game() {
-        var _this = this;
-        this.moveLeft = false;
-        this.symbolSprites = [];
-        this.symbols = [];
-        // instantiate app
-        this.app = new pixi_js_1.Application({
-            width: 1280,
-            height: 760,
-            backgroundColor: 0x1099bb,
-            resolution: window.devicePixelRatio || 1,
+var app = new PIXI.Application(1280, 720);
+var A2HS = new addToHomeScreen_1.AddToHomeScreen();
+var addBtn;
+window.onload = function () {
+    document.body.appendChild(app.view);
+};
+var loader = new PIXI.loaders.Loader();
+loader.add("image", "assets/_fortunechimes/button.png");
+loader.load(function () {
+    A2HS.initialize(function () {
+        // add a2hs button
+        addBtn = new button_1.Button(PIXI.utils.TextureCache["image"]);
+        addBtn.setPos(new PIXI.Point(60, 30));
+        app.stage.addChild(addBtn.sprite);
+        addBtn.addClickHandler(function () {
+            onClickA2HS();
         });
-        // create view in DOM
-        document.body.appendChild(this.app.view);
-        // preload needed assets
-        //  loader.add('symbols', 'images/_fortunechimes/symbols/symbols.json');
-        // loader.add('bg', 'images/_fortunechimes/bg/bg-main.jpg');
-        pixi_js_1.loader.add('btn', 'images/_fortunechimes/button.png');
-        // then launch app
-        // loader.load(this.setup.bind(this));
-        pixi_js_1.loader.load(function (loader, resources) {
-            /*  // resources is an object where the key is the name of the resource loaded and the value is the resource object.
-              // They have a couple default properties:
-              // - `url`: The URL that the resource was loaded from
-              // - `error`: The error that happened when trying to load (if any)
-              // - `data`: The raw data that was loaded
-              // also may contain other properties based on the middleware that runs.
-              sprites.bunny = new PIXI.TilingSprite(resources.bunny.texture);
-              sprites.spaceship = new PIXI.TilingSprite(resources.spaceship.texture);
-              sprites.scoreFont = new PIXI.TilingSprite(resources.scoreFont.texture);*/
-            _this.setup();
+    });
+});
+function onClickA2HS() {
+    try {
+        A2HS.installPromptEvent.prompt();
+        // Wait for the user to respond to the prompt
+        A2HS.installPromptEvent.userChoice.then(function (choice) {
+            if (choice.outcome === 'accepted') {
+                console.log('User accepted the A2HS prompt');
+            }
+            else {
+                console.log('User dismissed the A2HS prompt');
+            }
+            A2HS.installPromptEvent = null;
         });
-        // throughout the process multiple signals can be dispatched.
-        pixi_js_1.loader.onProgress.add(function () { }); // called once per loaded/errored file
-        pixi_js_1.loader.onError.add(function () { _this.onLoadError(); }); // called once per errored file
-        pixi_js_1.loader.onLoad.add(function () { console.log; }); // called once per loaded file
-        pixi_js_1.loader.onComplete.add(function () { _this.onLoadFinished(); }); // called once when the queued resources all load.
     }
-    Game.prototype.onLoadFinished = function () {
-    };
-    Game.prototype.onLoadError = function () {
-    };
-    Game.prototype.setup = function () {
-        /*// create bg
-        this.bg = new Sprite(loader.resources['bg'].texture);
-        this.app.stage.addChild(this.bg);
-    
-    
-        // append hero
-        for(let i = 0; i < 5; i++) {
-          const symbols = new Symbol(i);
-          this.symbols.push(symbols);
-          this.symbolSprites.push(symbols.sprite);
-          this.app.stage.addChild(symbols.sprite);
-          symbols.sprite.y = 200;
-          symbols.sprite.x = (i * 120 ) + 100;
-        };
-    
-        //  animate hero
-        this.app.ticker.add(() => {
-          this.update();
-        });
-        */
-        var _this = this;
-        this.A2HS = new addToHomeScreen_1.AddToHomeScreen();
-        this.A2HS.initialize(function () {
-            // add a2hs button
-            _this.addBtn = new button_1.Button(pixi_js_1.loader.resources['btn'].texture);
-            _this.addBtn.setPos(new PIXI.Point(60, 30));
-            _this.app.stage.addChild(_this.addBtn.sprite);
-            _this.addBtn.addClickHandler(function () {
-                _this.onClickA2HS();
-            });
-        });
-    };
-    Game.prototype.onClickA2HS = function () {
-        var _this = this;
-        try {
-            this.A2HS.installPromptEvent.prompt();
-            // Wait for the user to respond to the prompt
-            this.A2HS.installPromptEvent.userChoice.then(function (choice) {
-                if (choice.outcome === 'accepted') {
-                    console.log('User accepted the A2HS prompt');
-                }
-                else {
-                    console.log('User dismissed the A2HS prompt');
-                }
-                _this.A2HS.installPromptEvent = null;
-            });
-        }
-        catch (e) {
-            console.log(e);
-        }
-    };
-    Game.prototype.update = function () {
-        var speed = 2;
-        if (this.symbolSprites[0].x < this.app.view.width && this.moveLeft) {
-            this.symbolSprites[0].x += speed;
-        }
-        else {
-            this.symbolSprites[0].x -= speed;
-            this.moveLeft = this.symbolSprites[0].x <= 0;
-        }
-    };
-    return Game;
-}());
-new Game();
+    catch (e) {
+        console.log(e);
+    }
+}
 
 },{"./addToHomeScreen":1,"./game/button":2,"pixi.js":143}],4:[function(require,module,exports){
 /**
