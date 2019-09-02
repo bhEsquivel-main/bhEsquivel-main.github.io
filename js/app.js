@@ -86,9 +86,9 @@ var Game = /** @class */ (function () {
         // create view in DOM
         document.body.appendChild(this.app.view);
         // preload needed assets
-        pixi_js_1.loader.add('symbols', 'assets/_fortunechimes/symbols/symbols.json');
-        pixi_js_1.loader.add('bg', 'assets/_fortunechimes/bg/bg-main.jpg');
-        pixi_js_1.loader.add('btn', 'assets/_fortunechimes/button.png');
+        pixi_js_1.loader.add('symbols', 'images/_fortunechimes/symbols/symbols.json');
+        pixi_js_1.loader.add('bg', 'images/_fortunechimes/bg/bg-main.jpg');
+        pixi_js_1.loader.add('btn', 'images/_fortunechimes/button.png');
         // then launch app
         // loader.load(this.setup.bind(this));
         pixi_js_1.loader.load(function (loader, resources) {
