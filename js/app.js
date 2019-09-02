@@ -80,7 +80,8 @@ var Game = /** @class */ (function () {
         this.app = new pixi_js_1.Application({
             width: 1280,
             height: 760,
-            backgroundColor: 0x1099bb // light blue
+            backgroundColor: 0x1099bb,
+            resolution: window.devicePixelRatio || 1,
         });
         // create view in DOM
         document.body.appendChild(this.app.view);
