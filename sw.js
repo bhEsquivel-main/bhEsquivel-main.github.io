@@ -1,77 +1,33 @@
+/**
+ * Welcome to your Workbox-powered service worker!
+ *
+ * You'll need to register this file in your web app and you should
+ * disable HTTP caching for this file too.
+ * See https://goo.gl/nhQhGp
+ *
+ * The rest of the code is auto-generated. Please don't update this file
+ * directly; instead, make changes to your Workbox build configuration
+ * and re-run your build process.
+ * See https://goo.gl/2aRDsh
+ */
+
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
-workbox.setConfig({ debug: false });
+workbox.skipWaiting();
+workbox.clientsClaim();
 
-
-
-self.addEventListener('push', (event) => {
-  const title = 'Fortune Chimes';
-  const options = {
-    body: event.data.text()
-  };
-  event.waitUntil(self.registration.showNotification(title, options));
-});
-self.addEventListener('install', (event) => {
-  console.log('👷', 'install', event);
-  self.skipWaiting();
-});
-
-self.addEventListener('activate', (event) => {
-  console.log('👷', 'activate', event);
-  return self.clients.claim();
-});
-
-self.addEventListener('fetch', function(event) {
-  // console.log('👷', 'fetch', event);
-  event.respondWith(fetch(event.request));
-});
-
-workbox.precaching.precacheAndRoute([
+/**
+ * The workboxSW.precacheAndRoute() method efficiently caches and responds to
+ * requests for URLs in the manifest.
+ * See https://goo.gl/S9QRab
+ */
+self.__precacheManifest = [
   {
     "url": "index.html",
     "revision": "4b7557c25f69d801f74dbc87cdbcfa84"
-  },
-  {
-    "url": "js/app.js",
-    "revision": "f2ae699302372bd1495695dbed60e000"
   }
-]);
+].concat(self.__precacheManifest || []);
+workbox.precaching.suppressWarnings();
+workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-const bgSyncPlugin = new workbox.backgroundSync.Plugin('test-queue', {
-    maxRetentionTime: 24 * 60 // Retry for max of 24 Hours
-});
-
-// plugin for cache expiry and clear
-const expirationPlugin = new workbox.expiration.Plugin({
-    maxEntries: 100
-});
-
-// cache opaque responses
-const cacheOpaques = new workbox.cacheableResponse.Plugin({
-    statuses: [0, 200]
-});
-
-
-// versioning for killswitch
-const version = 1.2
-
-
-// set custom cache parameters
-
-this.workbox.core.setCacheNameDetails({
-    prefix: 'rslots-pwa',
-    suffix: `v:${version}`,
-});
-
-const assets = 'https://bhEsquivel-main.github.io/assets/'
-
-workbox.routing.registerRoute(
-    new RegExp(assets),
-    workbox.strategies.networkFirst({
-        cacheName: 'rslots-fchimes-assets',
-        plugins: [
-            expirationPlugin,
-            cacheOpaques
-        ]
-    }),
-);
+workbox.routing.registerRoute(/\.(?:png|jpg|jpeg|svg|atlas|json)$/, workbox.strategies.staleWhileRevalidate({ "cacheName":"cache-fortunechimes", plugins: [] }), 'GET');
