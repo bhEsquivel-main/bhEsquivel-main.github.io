@@ -109,7 +109,7 @@ var Game = /** @class */ (function () {
         pixi_js_1.loader.onComplete.add(function () { _this.onLoadFinished(); }); // called once when the queued resources all load.
     }
     Game.prototype.onLoadFinished = function () {
-        this.setup();
+        //  this.setup();
     };
     Game.prototype.onLoadError = function () {
     };
